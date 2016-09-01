@@ -12,7 +12,7 @@ var config = require('../config');
 
 charset(superagent);
 
-var base_url_index = 4;
+var base_url_index = 2;
 
 var normal_agent = function (u_id, passwd, target, callback) {
 

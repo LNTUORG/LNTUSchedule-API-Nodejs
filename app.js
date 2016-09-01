@@ -8,7 +8,6 @@ var express = require('express');
 var useragent = require('express-useragent');
 var body_parser = require('body-parser');
 var compression = require('compression');
-var url_parser = require('./middleware/url_parser');
 var app = express();
 
 var index = require('./routes/index');
