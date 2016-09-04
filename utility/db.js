@@ -30,7 +30,6 @@ var building_schema = new mongoose.Schema({
   building_id: { type: String },
   building_name : { type: String },
   building_phone : { type: String },
-  send_time : { type: String },
   auto_send : { type: String },
   create_at: { type: Date, default: Date.now() }
 });

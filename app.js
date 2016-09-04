@@ -8,6 +8,8 @@ var express = require('express');
 var useragent = require('express-useragent');
 var body_parser = require('body-parser');
 var compression = require('compression');
+var schedule = require('node-schedule');
+var utility = require('./utility');
 var app = express();
 
 var index = require('./routes/index');
@@ -26,4 +28,8 @@ app.use('/application', appl);
 
 var server = app.listen(config.port, function () {
   console.log('LNTUSchedule app listening at http://%s:%s', server.address().address, server.address().port);
+});
+
+var job = schedule.scheduleJob('10 * * * * *', function(){
+  utility.send_sms();
 });

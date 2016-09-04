@@ -4,6 +4,12 @@
 'use strict';
 
 var config = require('../config');
+var model = require('./db');
+var room_schedule_parser_v2 = require('../parser/room_schedule_v2');
+var constant = require('../agent/constant');
+var moment = require('moment');
+var async = require('async');
+var request = require('request');
 
 var crypto = require('crypto'),
   algorithm = 'aes-256-ctr',
@@ -23,7 +29,7 @@ function decrypt(text){
   return dec;
 }
 
-function parse_hex (binary_str) {
+function parse_hex(binary_str) {
   var result = '';
   while (binary_str.length % 3 != 0) {
     binary_str += '0';
@@ -45,8 +51,60 @@ Date.prototype.addDay = function (num) {
   return this;
 };
 
+function capture_a_building(building, callback) {
+  var date = new Date();
+  var week_day = date.getDay();
+  week_day = week_day == 0 ? 7 : week_day;
+
+  var start_date = moment(config.first_week_monday).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+  var days = moment().diff(start_date, 'days');
+  var week = Math.ceil(days / 7);
+
+  room_schedule_parser_v2(config.admin.user_id, config.admin.password, building.location_id, building.building_id, week, week_day, 'teacher/teachresource/roomschedule_week.jsdo', function (err, result) {
+    if (err != null) {
+      console.log(building.location_id, building.building_id);
+      var f_url = 'http://api.smsbao.com/sms?u=lntu_schedule&p=abf7ff8b340a3936f4419dcadc49abd4&m=' + config.class_admin.phone + '&c=' + building.building_name + '短信发送失败,因为教务处网站过于卡顿,请手动发送';
+      request(f_url, function (error, response, body) {
+
+      });
+      callback(null, building);
+      return;
+    }
+    var str = '';
+    for (var i = 0; i < result.results.length; i++) {
+      var arr = result.results[i].status;
+      for (var j = 0; j < 5; j++) {
+        str = str + arr[j];
+      }
+    }
+    var url = 'http://api.smsbao.com/sms?u=lntu_schedule&p=abf7ff8b340a3936f4419dcadc49abd4&m=' + building.building_phone + '&c=' + parse_hex(str);
+    request(url, function (error, response, body) {
+
+    });
+    callback(null, null);
+  })
+}
+
+function send_sms_with_buildings(docs) {
+  async.mapLimit(docs, 1, function (doc, callback) {
+    capture_a_building(doc, callback);
+  }, function (err, results) {
+  });
+}
+
+var send_sms = function () {
+  model.building_model.find({auto_send: '1'}, function (error, docs) {
+    if(error || docs.length < 1){
+      return;
+    } else {
+      send_sms_with_buildings(docs);
+    }
+  })
+};
+
 module.exports = {
   encrypt: encrypt,
   decrypt: decrypt,
-  parse_hex: parse_hex
+  parse_hex: parse_hex,
+  send_sms: send_sms
 };

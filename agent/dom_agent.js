@@ -12,7 +12,7 @@ var config = require('../config');
 
 charset(superagent);
 
-var base_url_index = 2;
+var base_url_index = 4;
 
 var normal_agent = function (u_id, passwd, target, callback) {
 
@@ -27,25 +27,12 @@ var normal_agent = function (u_id, passwd, target, callback) {
   });
 };
 
-var eva_agent = function (u_id, passwd, post_body, callback) {
-
-  get_cookie(u_id, passwd, function (err, cookie) {
-    if (err) {
-      return callback(err, null);
-    } else {
-      eva_course(cookie, post_body, function (err, final) {
-        return callback(err, final);
-      });
-    }
-  });
-};
-
 var get_cookie = function (u_id, passwd, callback) {
   superagent
     .post(constant.urls[base_url_index] + 'j_acegi_security_check')
     .send('j_username=' + u_id)
     .send('j_password=' + passwd)
-    .timeout(3000)
+    .timeout(30000)
     .set('Accept', 'application/json')
     .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36')
     .charset('gbk')
@@ -63,26 +50,10 @@ var get_cookie = function (u_id, passwd, callback) {
     });
 };
 
-var eva_course = function (cookie, post_body, callback) {
-
-  superagent
-    .post(constant.urls[base_url_index] + 'eva/index/putresult.jsdo')
-    .type('form')
-    .set('Cookie', 'JSESSIONID=' + cookie)
-    .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36')
-    .charset('gbk')
-    .send(post_body)
-    .end(function(err, res) {
-      if (err) {
-        return callback(constant.cookie.net_error, null);
-      }
-      return callback(null, null);
-    });
-};
-
 var get_dom = function (target, cookie, callback) {
   superagent
     .get(constant.urls[base_url_index] + target)
+    .timeout(30000)
     .set('Cookie', 'JSESSIONID=' + cookie + '; AJSTAT_ok_times=1')
     .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36')
     .charset('gbk')
@@ -103,7 +74,7 @@ var net_speed = function (u_id, passwd, url, callback) {
     .post(url + 'j_acegi_security_check')
     .send('j_username=' + u_id)
     .send('j_password=' + passwd)
-    .timeout(3000)
+    .timeout(30000)
     .set('Accept', 'application/json')
     .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36')
     .charset('gbk')
@@ -162,7 +133,6 @@ var test_speed = function (callback) {
 module.exports = {
   normal_agent: normal_agent,
   get_cookie: get_cookie,
-  eva_agent: eva_agent,
   test_speed: test_speed,
   base_url_index: base_url_index
 };

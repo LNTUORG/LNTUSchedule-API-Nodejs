@@ -18,7 +18,8 @@ var config = {
     password: 'xxx'
   },
   class_admin: {
-    user_id: 'class_admin'
+    user_id: 'class_admin',
+    phone: '13218080906'
   }
 };
 
