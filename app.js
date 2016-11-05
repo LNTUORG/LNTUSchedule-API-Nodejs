@@ -8,6 +8,7 @@ var express = require('express');
 var useragent = require('express-useragent');
 var body_parser = require('body-parser');
 var compression = require('compression');
+var token_parser = require('./middleware/token_parser');
 var schedule = require('node-schedule');
 var utility = require('./utility');
 var app = express();
@@ -15,6 +16,7 @@ var app = express();
 var index = require('./routes/index');
 var account = require('./routes/account');
 var appl = require('./routes/application');
+var room_schedule = require('./routes/room_schedule');
 var cors = require('cors');
 
 app.use(body_parser.urlencoded({ extended: false }));
@@ -25,6 +27,9 @@ app.use(cors());
 app.use('/', index);
 app.use('/account', account);
 app.use('/application', appl);
+
+app.use(token_parser);
+app.use('/room', room_schedule);
 
 var server = app.listen(config.port, function () {
   console.log('LNTUSchedule app listening at http://%s:%s', server.address().address, server.address().port);
