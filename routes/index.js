@@ -7,7 +7,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function (req, res) {
-  return res.send('<h2>Hello Node.js<h2>');
+  return res.send('<h2>Hello LNTU.<h2>');
 });
 
 module.exports = router;

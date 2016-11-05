@@ -14,7 +14,7 @@ var config = require('../config');
 
 router.post('/login', function (req, res) {
   var user = {
-    id: req.body['userId'],
+    id: req.body['user_id'],
     login_token: uuid.v4(),
     password: req.body['password'],
     type: '',
@@ -23,7 +23,7 @@ router.post('/login', function (req, res) {
     ip_address: req.headers['x-forwarded-for'],
     user_agent: req.useragent['source']
   };
-  if (req.body['userId'] == config.class_admin.user_id) {
+  if (req.body['user_id'] == config.class_admin.user_id) {
     model.user_model.find({ id: config.class_admin.user_id }, function (error, docs) {
       if (user.password != utility.decrypt(docs[0]['password'])){
         return res.status(400).json({ code: constant.cookie.user_error, message: 'password error' });
@@ -34,13 +34,13 @@ router.post('/login', function (req, res) {
         return res.status(200).json(generate_dict(user));
       }
     });
-  } else if (req.body['userId'].length == 10) {
+  } else if (req.body['user_id'].length == 10) {
     user.type = 'STUDENT'
   } else {
     user.type = 'TEACHER'
   }
 
-  agent.get_cookie(req.body['userId'], req.body['password'], function (err) {
+  agent.get_cookie(req.body['user_id'], req.body['password'], function (err) {
 
     if (err == constant.cookie.user_error) {
       return res.status(400).json({ code: err, message: 'password error' });
@@ -54,11 +54,11 @@ router.post('/login', function (req, res) {
 });
 
 router.post('/change-password', function (req, res) {
-  if (req.body['userId'] != config.class_admin.user_id) {
+  if (req.body['user_id'] != config.class_admin.user_id) {
     return res.status(400).json({ code: constant.cookie.args_error, message: 'You cant change password' });
   }
   var user = {
-    id: req.body['userId'],
+    id: req.body['user_id'],
     login_token: uuid.v4(),
     password: req.body['password'],
     type: 'CLASS_ADMIN',
@@ -72,10 +72,10 @@ router.post('/change-password', function (req, res) {
     if (user.password != utility.decrypt(docs[0]['password'])){
       return res.status(400).json({ code: constant.cookie.user_error, message: 'password error' });
     } else {
-      if (req.body['newPassword'] == '' || typeof(req.body['newPassword'])=="undefined") {
+      if (req.body['new_password'] == '' || typeof(req.body['new_password'])=="undefined") {
         return res.status(400).json({ code: constant.cookie.args_error, message: 'Args error' });
       }
-      user.password = utility.encrypt(req.body['newPassword']);
+      user.password = utility.encrypt(req.body['new_password']);
       update_user(user);
       return res.status(200).json(generate_dict(user));
     }
@@ -97,10 +97,10 @@ function update_user(user) {
 
 function generate_dict(user) {
   return {
-    userId: user.id,
-    loginToken: user.login_token,
-    expiresAt: user.expires_at,
-    userType: user.type
+    user_id: user.id,
+    login_token: user.login_token,
+    expires_at: user.expires_at,
+    user_type: user.type
   }
 }
 
