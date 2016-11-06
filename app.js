@@ -37,6 +37,6 @@ var server = app.listen(config.port, function () {
   console.log('LNTUSchedule app listening at http://%s:%s', server.address().address, server.address().port);
 });
 
-var job = schedule.scheduleJob('10 * * * * *', function(){
+var job = schedule.scheduleJob('* * 2 * * *', function(){
   utility.send_sms();
 });

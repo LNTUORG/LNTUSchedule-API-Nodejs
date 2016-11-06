@@ -82,6 +82,7 @@ router.post('/change-password', function (req, res) {
       }
       user.password = utility.encrypt(req.body['new_password']);
       update_user(user);
+      res.cookie('auth', user.login_token, { httpOnly: true });
       return res.status(200).json(generate_dict(user));
     }
   });

@@ -71,10 +71,10 @@ function capture_a_building(building, callback) {
       return;
     }
     var str = '';
-    for (var i = 0; i < result.results.length; i++) {
-      var arr = result.results[i].status;
-      for (var j = 0; j < 5; j++) {
-        str = str + arr[j];
+    for (var i = 0; i < 5; i++) {
+      for (var j = 0; j < result.results.length; j++) {
+        var arr = result.results[j].status;
+        str = str + arr[i];
       }
     }
     var url = 'http://api.smsbao.com/sms?u=lntu_schedule&p=abf7ff8b340a3936f4419dcadc49abd4&m=' + building.building_phone + '&c=' + parse_hex(str);
