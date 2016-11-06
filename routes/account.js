@@ -34,7 +34,7 @@ router.post('/login', function (req, res) {
         user.type = 'CLASS_ADMIN';
         user.password = utility.encrypt(user.password);
         update_user(user);
-        res.cookie('auth', user.login_token, { domain: 'web.schedule.lntu.org', httpOnly: true });
+        res.cookie('auth', user.login_token, { domain: '.schedule.lntu.org', httpOnly: true });
         return res.status(200).json(generate_dict(user));
       }
     });
@@ -82,7 +82,7 @@ router.post('/change-password', function (req, res) {
       }
       user.password = utility.encrypt(req.body['new_password']);
       update_user(user);
-      res.cookie('auth', user.login_token, { domain: 'web.schedule.lntu.org', httpOnly: true });
+      res.cookie('auth', user.login_token, { domain: '.schedule.lntu.org', httpOnly: true });
       return res.status(200).json(generate_dict(user));
     }
   });
