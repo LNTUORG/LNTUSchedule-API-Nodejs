@@ -12,6 +12,7 @@ var token_parser = require('./middleware/token_parser');
 var schedule = require('node-schedule');
 var utility = require('./utility');
 var cookie_parser = require('cookie-parser');
+var request = require('request');
 var app = express();
 
 var index = require('./routes/index');
@@ -37,6 +38,14 @@ var server = app.listen(config.port, function () {
   console.log('LNTUSchedule app listening at http://%s:%s', server.address().address, server.address().port);
 });
 
-var job = schedule.scheduleJob('0 0 2 * * *', function(){
-  utility.send_sms();
+if (config.auto_send) {
+  var auto_send = schedule.scheduleJob('0 0 2 * * *', function (){
+    utility.send_sms();
+  });
+}
+
+var auto_fix = schedule.scheduleJob('*/10 * * * *', function () {
+  request('http://localhost:' + server.address().port + '/application/auto-fix', function (error, response, body) {
+
+  });
 });

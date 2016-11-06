@@ -5,6 +5,7 @@
 
 var express = require('express');
 var router = express.Router();
+var agent = require('../agent/dom_agent');
 
 router.get('/auto-fix', function (req, res) {
 

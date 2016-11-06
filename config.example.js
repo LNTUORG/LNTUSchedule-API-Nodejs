@@ -8,7 +8,7 @@ var config = {
   first_week_monday: '2016-08-29T00:00:00.000+08:00', // 每学期的第一个周一，每学期都需要手动改一次
   server_name: 'Aliyun-Node', // 服务器名字，选填
   secret_key: 'wv6GC3iMpUJa', // 加盐
-
+  auto_send: false, // 自动发送
   db: {
     uri: 'mongodb://name:pass@localhost:27017/db' // 数据库地址
   },

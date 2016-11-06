@@ -94,10 +94,6 @@ var net_speed = function (u_id, passwd, url, callback) {
 
 var test_speed = function (callback) {
 
-  if (!config.admin.enable) {
-    return;
-  }
-
   var content = moment().format('YYYY-MM-DDTHH:mm:ss.SSSZ') + '\n\n';
   var results = [];
 
