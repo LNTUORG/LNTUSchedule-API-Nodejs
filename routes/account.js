@@ -34,7 +34,7 @@ router.post('/login', function (req, res) {
         user.type = 'CLASS_ADMIN';
         user.password = utility.encrypt(user.password);
         update_user(user);
-        res.cookie('auth', user.login_token, { domain: '.schedule.lntu.org', path: '/', maxAge: 27000000 });
+        res.cookie('auth', user.login_token, { domain: '.schedule.lntu.org', path: '/', maxAge: 270000000 });
         return res.status(200).json(generate_dict(user));
       }
     });
@@ -81,8 +81,8 @@ router.post('/change-password', function (req, res) {
         return res.status(400).json({ code: constant.cookie.args_error, message: 'Args error' });
       }
       user.password = utility.encrypt(req.body['new_password']);
-      update_user(user)
-      res.cookie('auth', user.login_token, { domain: '.schedule.lntu.org', path: '/', maxAge: 27000000 });
+      update_user(user);
+      res.cookie('auth', user.login_token, { domain: '.schedule.lntu.org', path: '/', maxAge: 270000000 });
       return res.status(200).json(generate_dict(user));
     }
   });
