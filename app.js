@@ -11,6 +11,7 @@ var compression = require('compression');
 var token_parser = require('./middleware/token_parser');
 var schedule = require('node-schedule');
 var utility = require('./utility');
+var cookie_parser = require('cookie-parser');
 var app = express();
 
 var index = require('./routes/index');
@@ -28,6 +29,7 @@ app.use('/', index);
 app.use('/account', account);
 app.use('/application', appl);
 
+app.use(cookie_parser());
 app.use(token_parser);
 app.use('/room', room_schedule);
 
