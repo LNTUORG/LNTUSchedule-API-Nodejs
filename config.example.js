@@ -19,7 +19,9 @@ var config = {
   },
   class_admin: {
     user_id: 'class_admin', // 该系统不允许注册，只有这一个用户名
-    phone: '13218080906' // 管理员电话，用来接受报警通知
+    phone: '13218080906', // 管理员电话，用来接受报警通知
+    sms_user_name: '', // 短信宝账户用户名
+    sms_password: '' // 短信宝密码
   }
 };
 

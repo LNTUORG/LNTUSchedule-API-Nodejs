@@ -77,7 +77,7 @@ function capture_a_building(building, callback) {
         str = str + arr[i];
       }
     }
-    var url = 'http://api.smsbao.com/sms?u=lntu_schedule&p=abf7ff8b340a3936f4419dcadc49abd4&m=' + building.building_phone + '&c=' + parse_hex(str);
+    var url = 'http://api.smsbao.com/sms?u=' + config.class_admin.sms_user_name + '&p=' + crypto.createHash('md5').update(config.class_admin.sms_password).digest('hex') + '&m=' + building.building_phone + '&c=' + parse_hex(str);
     request(url, function (error, response, body) {
 
     });
@@ -95,7 +95,6 @@ function send_sms_with_buildings(docs) {
 var send_sms = function () {
   model.building_model.find({auto_send: '1'}, function (error, docs) {
     if(error || docs.length < 1){
-      return;
     } else {
       send_sms_with_buildings(docs);
     }
