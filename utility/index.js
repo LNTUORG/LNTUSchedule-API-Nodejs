@@ -63,7 +63,7 @@ function capture_a_building(building, callback) {
   room_schedule_parser_v2(config.admin.user_id, config.admin.password, building.location_id, building.building_id, week, week_day, 'teacher/teachresource/roomschedule_week.jsdo', function (err, result) {
     if (err != null) {
       console.log(building.location_id, building.building_id);
-      var f_url = 'http://api.smsbao.com/sms?u=lntu_schedule&p=abf7ff8b340a3936f4419dcadc49abd4&m=' + config.class_admin.phone + '&c=' + building.building_name + '短信发送失败,因为教务处网站过于卡顿,请手动发送';
+      var f_url = 'http://api.smsbao.com/sms?u=' + config.class_admin.sms_user_name + '&p=' + crypto.createHash('md5').update(config.class_admin.sms_password).digest('hex') + '&m=' + config.class_admin.phone + '&c=' + building.building_name + '短信发送失败,因为教务处网站过于卡顿,请手动发送';
       request(f_url, function (error, response, body) {
 
       });
