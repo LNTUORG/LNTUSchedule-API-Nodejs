@@ -11,6 +11,41 @@ var moment = require('moment');
 var async = require('async');
 var request = require('request');
 
+var hex_map = {
+  '00000': '0',
+  '00001': '1',
+  '00010': '2',
+  '00011': '3',
+  '00100': '4',
+  '00101': '5',
+  '00110': '6',
+  '00111': '7',
+  '01000': '8',
+  '01001': '9',
+  '01010': 'a',
+  '01011': 'b',
+  '01100': 'c',
+  '01101': 'd',
+  '01110': 'e',
+  '01111': 'f',
+  '10000': 'g',
+  '10001': 'h',
+  '10010': 'i',
+  '10011': 'j',
+  '10100': 'k',
+  '10101': 'l',
+  '10110': 'm',
+  '10111': 'n',
+  '11000': 'o',
+  '11001': 'p',
+  '11010': 'q',
+  '11011': 'r',
+  '11100': 's',
+  '11101': 't',
+  '11110': 'u',
+  '11111': 'v'
+};
+
 var crypto = require('crypto'),
   algorithm = 'aes-256-ctr',
   password = config.secret_key;
@@ -31,16 +66,10 @@ function decrypt(text){
 
 function parse_hex(binary_str) {
   var result = '';
-  while (binary_str.length % 3 != 0) {
-    binary_str += '0';
-  }
-  for (var i = 0; i < binary_str.length / 3; i++) {
-    var temp_str = binary_str.substring(i * 3, (i + 1) * 3);
-    var sum = 0;
-    for (var j = 0; j < 3; j++) {
-      sum +=  temp_str[j] * Math.pow(2, 2 - j);
-    }
-    result += sum;
+
+  for (var i = 0; i < binary_str.length / 5; i++) {
+    var temp_str = binary_str.substring(i * 5, (i + 1) * 5);
+    result += hex_map[temp_str];
   }
   return result;
 }
