@@ -50,6 +50,9 @@ var analyse_room = function(user_id, password, aid, buildingid, whichweek, week,
               if (room_arr[k] == '尔雅楼209') {
                 dict_arr.push({name: '尔雅楼212', status: ['0', '0', '0', '0', '0']})
               }
+              if (room_arr[k] == '尔雅楼205') {
+                dict_arr.push({name: '尔雅楼206', status: ['0', '0', '0', '0', '0']})
+              }
             }
           }
         } else {
@@ -57,6 +60,9 @@ var analyse_room = function(user_id, password, aid, buildingid, whichweek, week,
             dict_arr.push({name: room_arr[l], status: total_status_arr[l]});
             if (room_arr[l] == '尔雅楼209') {
               dict_arr.push({name: '尔雅楼212', status: ['0', '0', '0', '0', '0']})
+            }
+            if (room_arr[l] == '尔雅楼205') {
+              dict_arr.push({name: '尔雅楼206', status: ['0', '0', '0', '0', '0']})
             }
           }
         }
