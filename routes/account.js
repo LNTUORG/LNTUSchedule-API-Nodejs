@@ -42,22 +42,7 @@ router.post('/login', function (req, res) {
       }
     });
   } else {
-    if (req.body['user_id'].length == 10) {
-      user.type = 'STUDENT'
-    } else {
-      user.type = 'TEACHER'
-    }
-    agent.get_cookie(req.body['user_id'], req.body['password'], function (err) {
-
-      if (err == constant.cookie.user_error) {
-        return res.status(400).json({ code: err, message: 'password error' });
-      } else if (err == constant.cookie.net_error) {
-        return res.status(500).json({ code: err, message: 'The server may be down.' });
-      }
-      user.password = utility.encrypt(user.password);
-      update_user(user);
-      return res.status(200).json(generate_dict(user));
-    });
+    return res.status(403).json({ code: err, message: 'Your group is no access.' });
   }
 });
 
