@@ -7,6 +7,7 @@ var agent = require('../agent/dom_agent');
 var cheerio = require('cheerio');
 var config = require('../config');
 var constant = require('../agent/constant');
+var model = require('../utility/db');
 
 var analyse_room = function(user_id, password, aid, buildingid, whichweek, week, target, callback) {
 
@@ -39,23 +40,26 @@ var analyse_room = function(user_id, password, aid, buildingid, whichweek, week,
 
     var dict_arr = [];
 
-    if (aid == 3 && buildingid == 6) {
-      for (var l = 0; l < constant.erya_rooms.length; l++) {
-        if (!(constant.erya_rooms[l] in temp_dict)) {
-          dict_arr.push({name: constant.erya_rooms[l], status: ['0', '0', '0', '0', '0']});
-        } else {
-          dict_arr.push({name: constant.erya_rooms[l], status: temp_dict[constant.erya_rooms[l]]});
+    model.building_model.find({ location_id: aid, building_id: buildingid }, function (error, docs) {
+      if (error || docs.length == 0) {
+        for (var m = 0; m < room_arr.length; m++) {
+          dict_arr.push({name: room_arr[m], status: total_status_arr[m]});
+        }
+      } else {
+        var rooms = docs[0]['rooms'];
+        for (var l = 0; l < rooms.length; l++) {
+          if (!(rooms[l] in temp_dict)) {
+            dict_arr.push({name: rooms[l], status: ['0', '0', '0', '0', '0']});
+          } else {
+            dict_arr.push({name: rooms[l], status: temp_dict[rooms[l]]});
+          }
         }
       }
-    } else {
-      for (var m = 0; m < room_arr.length; m++) {
-        dict_arr.push({name: room_arr[m], status: total_status_arr[m]});
-      }
-    }
-    var dict = {};
-    dict.firstWeekMondayAt = config.first_week_monday;
-    dict.results = dict_arr;
-    return callback(null, dict);
+      var dict = {};
+      dict.firstWeekMondayAt = config.first_week_monday;
+      dict.results = dict_arr;
+      return callback(null, dict);
+    });
   });
 };
 

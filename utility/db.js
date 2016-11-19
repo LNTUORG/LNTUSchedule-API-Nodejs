@@ -28,27 +28,17 @@ var building_schema = new mongoose.Schema({
   location_id: { type: String },
   location_name: { type: String },
   building_id: { type: String },
-  building_name : { type: String },
-  building_phone : { type: String },
-  auto_send : { type: Boolean },
-  create_at: { type: Date, default: Date.now() }
-});
-
-var useless_class_schema = new mongoose.Schema({
-  location_id: { type: String },
-  location_name: { type: String },
-  building_id: { type: String },
   building_name: { type: String },
-  class_name : { type: String },
+  building_phone: { type: String },
+  auto_send: { type: Boolean },
+  rooms: {type: Array},
   create_at: { type: Date, default: Date.now() }
 });
 
 var user_model = db.model('user', user_schema);
 var building_model = db.model('building', building_schema);
-var useless_class_model = db.model('useless_class', useless_class_schema);
 
 module.exports = {
   user_model: user_model,
-  building_model: building_model,
-  useless_class_model: useless_class_model
+  building_model: building_model
 };
