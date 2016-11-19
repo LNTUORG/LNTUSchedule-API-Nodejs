@@ -6,6 +6,7 @@ npm-debug.log*
 
 # Configuration
 config.js
+schedule_web
 
 # Runtime data
 pids

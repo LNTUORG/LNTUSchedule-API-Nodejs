@@ -7,7 +7,6 @@ var agent = require('../agent/dom_agent');
 var cheerio = require('cheerio');
 var config = require('../config');
 var constant = require('../agent/constant');
-var model = require('../utility/db');
 
 var analyse_room = function(user_id, password, aid, buildingid, whichweek, week, target, callback) {
 
@@ -33,45 +32,30 @@ var analyse_room = function(user_id, password, aid, buildingid, whichweek, week,
       }
       total_status_arr.push(status_arr);
     }
+    var temp_dict = {};
+    for (var k = 0; k < room_arr.length; k++) {
+      temp_dict[room_arr[k]] = total_status_arr[k];
+    }
+
     var dict_arr = [];
 
-    model.useless_class_model.find({ location_id: aid, building_id: buildingid }, function (error, docs) {
-      if (error) {
-        return callback(constant.cookie.net_error, null);
-      } else {
-        if (docs.length > 0) {
-          var useless_arr = [];
-          for (var m = 0; m < docs.length; m++) {
-            useless_arr.push(docs[m].class_name);
-          }
-          for (var k = 0; k < room_arr.length; k++) {
-            if (useless_arr.indexOf(room_arr[k]) < 0) {
-              dict_arr.push({name: room_arr[k], status: total_status_arr[k]});
-              if (room_arr[k] == '尔雅楼209') {
-                dict_arr.push({name: '尔雅楼212', status: ['0', '0', '0', '0', '0']})
-              }
-              if (room_arr[k] == '尔雅楼205') {
-                dict_arr.push({name: '尔雅楼206', status: ['0', '0', '0', '0', '0']})
-              }
-            }
-          }
+    if (aid == 3 && buildingid == 6) {
+      for (var l = 0; l < constant.erya_rooms.length; l++) {
+        if (!(constant.erya_rooms[l] in temp_dict)) {
+          dict_arr.push({name: constant.erya_rooms[l], status: ['0', '0', '0', '0', '0']});
         } else {
-          for (var l = 0; l < room_arr.length; l++) {
-            dict_arr.push({name: room_arr[l], status: total_status_arr[l]});
-            if (room_arr[l] == '尔雅楼209') {
-              dict_arr.push({name: '尔雅楼212', status: ['0', '0', '0', '0', '0']})
-            }
-            if (room_arr[l] == '尔雅楼205') {
-              dict_arr.push({name: '尔雅楼206', status: ['0', '0', '0', '0', '0']})
-            }
-          }
+          dict_arr.push({name: constant.erya_rooms[l], status: temp_dict[constant.erya_rooms[l]]});
         }
-        var dict = {};
-        dict.firstWeekMondayAt = config.first_week_monday;
-        dict.results = dict_arr;
-        return callback(null, dict);
       }
-    });
+    } else {
+      for (var m = 0; m < room_arr.length; m++) {
+        dict_arr.push({name: room_arr[m], status: total_status_arr[m]});
+      }
+    }
+    var dict = {};
+    dict.firstWeekMondayAt = config.first_week_monday;
+    dict.results = dict_arr;
+    return callback(null, dict);
   });
 };
 
