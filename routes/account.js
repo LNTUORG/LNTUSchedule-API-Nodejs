@@ -31,6 +31,9 @@ router.post('/login', function (req, res) {
       if (user.password != utility.decrypt(docs[0]['password'])){
         return res.status(400).json({ code: constant.cookie.user_error, message: 'password error' });
       } else {
+        if (docs[0]['expires_at'] >= new Date()) {
+          user.login_token = docs[0]['login_token'];
+        }
         user.type = 'CLASS_ADMIN';
         user.password = utility.encrypt(user.password);
         update_user(user);
