@@ -56,11 +56,7 @@ function capture_a_building(building, callback) {
 
   room_schedule_parser_v2(config.admin.user_id, config.admin.password, building.location_id, building.building_id, week, week_day, 'teacher/teachresource/roomschedule_week.jsdo', function (err, result) {
     if (err != null) {
-      console.log(building.location_id, building.building_id);
-      var f_url = 'http://api.smsbao.com/sms?u=' + config.class_admin.sms_user_name + '&p=' + crypto.createHash('md5').update(config.class_admin.sms_password).digest('hex') + '&m=' + config.class_admin.phone + '&c=' + building.building_name + '短信发送失败,因为教务处网站过于卡顿,请手动发送';
-      request(f_url, function (error, response, body) {
-
-      });
+      send_sms_using_smsbao_service(config.class_admin.phone, building.building_name + '短信发送失败,因为教务处网站过于卡顿,请手动发送');
       callback(null, building);
       return;
     }
@@ -71,12 +67,16 @@ function capture_a_building(building, callback) {
         str = str + arr[i];
       }
     }
-    var url = 'http://api.smsbao.com/sms?u=' + config.class_admin.sms_user_name + '&p=' + crypto.createHash('md5').update(config.class_admin.sms_password).digest('hex') + '&m=' + building.building_phone + '&c=' + parse_hex(str);
-    request(url, function (error, response, body) {
-
-    });
+    send_sms_using_smsbao_service(config.class_admin.phone, parse_hex(str));
     callback(null, null);
   })
+}
+
+function send_sms_using_smsbao_service(phone, content) {
+  var url = 'http://api.smsbao.com/sms?u=' + config.class_admin.sms_user_name + '&p=' + crypto.createHash('md5').update(config.class_admin.sms_password).digest('hex') + '&m=' + phone + '&c=' + content;
+  request(url, function (error, response, body) {
+    // refactor needed.
+  });
 }
 
 function send_sms_with_buildings(docs) {
@@ -87,7 +87,7 @@ function send_sms_with_buildings(docs) {
 }
 
 var send_sms = function () {
-  model.building_model.find({auto_send: '1'}, function (error, docs) {
+  model.building_model.find({auto_send: true}, function (error, docs) {
     if(error || docs.length < 1){
     } else {
       send_sms_with_buildings(docs);
