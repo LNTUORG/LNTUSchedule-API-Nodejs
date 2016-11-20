@@ -44,8 +44,8 @@ router.post('/v1/lntu-building', function (req, res) {
     building_id: req.body['building_id'],
     building_name: req.body['building_name'],
     building_phone: req.body['building_phone'],
-    rooms: req.body['rooms'],
-    auto_send: rooms_arr
+    rooms: rooms_arr,
+    auto_send: req.body['auto_send']
   };
   model.building_model.find({ building_id: req.body['building_id'], location_id: req.body['location_id'] }, function (error, docs) {
     if(error || docs.length < 1){
