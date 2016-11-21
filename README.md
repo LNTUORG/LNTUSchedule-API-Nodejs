@@ -1,5 +1,7 @@
 # Liaoning Technical University Room Schedule System Agent Server Written In Node.js
 
+[![GitHub release](https://img.shields.io/github/release/LNTUORG/LNTUSchedule-API-Nodejs.svg)](https://github.com/LNTUORG/LNTUSchedule-API-Nodejs/releases) [![GitHub issues](https://img.shields.io/github/issues/LNTUORG/LNTUSchedule-API-Nodejs.svg)](https://github.com/LNTUORG/LNTUSchedule-API-Nodejs/issues) [![GitHub license](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://raw.githubusercontent.com/LNTUORG/LNTUSchedule-API-Nodejs/master/LICENSE)
+
 ## Requirements
 
 - Node.js 6.9.1 LTS (recommended)
