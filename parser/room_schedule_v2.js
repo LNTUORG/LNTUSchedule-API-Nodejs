@@ -58,6 +58,8 @@ var analyse_room = function(user_id, password, aid, buildingid, whichweek, week,
       var dict = {};
       dict.firstWeekMondayAt = config.first_week_monday;
       dict.results = dict_arr;
+      dict.week = whichweek;
+      dict.weekday = week;
       return callback(null, dict);
     });
   });

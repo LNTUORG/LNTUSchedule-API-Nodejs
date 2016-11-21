@@ -52,6 +52,7 @@ function capture_a_building(building, callback) {
 
   var start_date = moment(config.first_week_monday).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
   var days = moment().diff(start_date, 'days');
+  days = days + 1;
   var week = Math.ceil(days / 7);
 
   room_schedule_parser_v2(config.admin.user_id, config.admin.password, building.location_id, building.building_id, week, week_day, 'teacher/teachresource/roomschedule_week.jsdo', function (err, result) {
