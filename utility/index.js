@@ -67,7 +67,7 @@ function capture_a_building(building, callback) {
         str = str + arr[i];
       }
     }
-    send_sms_using_smsbao_service(config.class_admin.phone, parse_hex(str));
+    send_sms_using_smsbao_service(building.building_phone, parse_hex(str));
     callback(null, null);
   })
 }

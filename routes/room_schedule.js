@@ -63,13 +63,14 @@ router.put('/v1/lntu-building', function (req, res) {
   if (typeof req.body['location_name'] == 'undefined' || typeof req.body['auto_send'] == 'undefined' || typeof req.body['building_name'] == 'undefined' || typeof req.body['building_phone'] == 'undefined' || typeof req.body['location_id'] == 'undefined' || typeof req.body['building_id'] == 'undefined' || req.body['building_id'] == '' || req.body['building_name'] == '' || req.body['building_phone'] == '' || req.body['location_id'] == '' || req.body['auto_send'] == '' || req.body['location_name'] == '') {
     return res.status(400).json({ code: constant.cookie.args_error, message: 'it seems something went wrong' });
   }
+  var rooms_arr = JSON.parse(req.body['rooms']);
   var building = {
     location_id: req.body['location_id'],
     location_name: req.body['location_name'],
     building_id: req.body['building_id'],
     building_name: req.body['building_name'],
     building_phone: req.body['building_phone'],
-    rooms: req.body['rooms'],
+    rooms: rooms_arr,
     auto_send: req.body['auto_send']
   };
   model.building_model.update({ building_id: req.body['building_id'], location_id: req.body['location_id'] }, building, function (error) {
