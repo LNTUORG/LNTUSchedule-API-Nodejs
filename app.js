@@ -39,13 +39,13 @@ var server = app.listen(config.port, function () {
 });
 
 if (config.auto_send) {
-  var auto_send = schedule.scheduleJob('0 0 2 * * *', function (){
+  var auto_send = schedule.scheduleJob('0 1 2 * * *', function (){
     utility.send_sms();
   });
 }
 
 var auto_fix = schedule.scheduleJob('*/10 * * * *', function () {
   request('http://localhost:' + server.address().port + '/application/auto-fix', function (error, response, body) {
-
+    console.log(body);
   });
 });

@@ -74,6 +74,7 @@ function capture_a_building(building, callback) {
 }
 
 function send_sms_using_smsbao_service(phone, content) {
+  console.log(phone, content);
   var url = 'http://api.smsbao.com/sms?u=' + config.class_admin.sms_user_name + '&p=' + crypto.createHash('md5').update(config.class_admin.sms_password).digest('hex') + '&m=' + phone + '&c=' + content;
   request(url, function (error, response, body) {
     // refactor needed.
