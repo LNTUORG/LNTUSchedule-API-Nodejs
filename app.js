@@ -39,7 +39,7 @@ var server = app.listen(config.port, function () {
 });
 
 if (config.auto_send) {
-  var auto_send = schedule.scheduleJob('0 1 2 * * *', function (){
+  var auto_send = schedule.scheduleJob('0 1 6 * * *', function (){
     utility.send_sms();
   });
 }
