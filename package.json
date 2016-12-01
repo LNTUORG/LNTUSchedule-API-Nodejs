@@ -25,6 +25,7 @@
     "nodemailer": "^2.3.0",
     "request": "^2.74.0",
     "superagent": "^1.8.0",
-    "superagent-charset": "^1.0.0"
+    "superagent-charset": "^1.0.0",
+    "urlencode": "^1.1.0"
   }
 }

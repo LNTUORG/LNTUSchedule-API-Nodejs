@@ -10,6 +10,7 @@ var constant = require('../agent/constant');
 var moment = require('moment');
 var async = require('async');
 var request = require('request');
+var urlencode = require('urlencode');
 
 var crypto = require('crypto'),
   algorithm = 'aes-256-ctr',
@@ -57,7 +58,7 @@ function capture_a_building(building, callback) {
 
   room_schedule_parser_v2(config.admin.user_id, config.admin.password, building.location_id, building.building_id, week, week_day, 'teacher/teachresource/roomschedule_week.jsdo', function (err, result) {
     if (err != null) {
-      send_sms_using_smsbao_service(config.class_admin.phone, building.building_name + '短信发送失败,因为教务处网站过于卡顿,请手动发送');
+      send_sms_using_smsbao_service(config.class_admin.phone, building.building_name + '短信发送失败，因为教务处网站过于卡顿，请手动发送');
       callback(null, building);
       return;
     }
@@ -75,7 +76,7 @@ function capture_a_building(building, callback) {
 
 function send_sms_using_smsbao_service(phone, content) {
   console.log(phone, content);
-  var url = 'http://api.smsbao.com/sms?u=' + config.class_admin.sms_user_name + '&p=' + crypto.createHash('md5').update(config.class_admin.sms_password).digest('hex') + '&m=' + phone + '&c=' + content;
+  var url = 'http://api.smsbao.com/sms?u=' + config.class_admin.sms_user_name + '&p=' + crypto.createHash('md5').update(config.class_admin.sms_password).digest('hex') + '&m=' + phone + '&c=' + urlencode(content);
   request(url, function (error, response, body) {
     // refactor needed.
   });
