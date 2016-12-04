@@ -42,7 +42,7 @@ router.post('/login', function (req, res) {
       }
     });
   } else {
-    return res.status(403).json({ code: err, message: 'Your group is no access.' });
+    return res.status(403).json({ code: constant.cookie.auth_error, message: 'Your group is no access.' });
   }
 });
 
