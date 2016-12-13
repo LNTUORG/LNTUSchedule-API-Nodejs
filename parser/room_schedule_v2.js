@@ -49,7 +49,7 @@ var analyse_room = function(user_id, password, aid, buildingid, whichweek, week,
         var rooms = docs[0]['rooms'];
         for (var l = 0; l < rooms.length; l++) {
           if (!(rooms[l] in temp_dict)) {
-            dict_arr.push({name: rooms[l], status: ['0', '0', '0', '0', '0']});
+            dict_arr.push({name: rooms[l], status: ['1', '1', '1', '1', '1']});
           } else {
             dict_arr.push({name: rooms[l], status: temp_dict[rooms[l]]});
           }
