@@ -15,7 +15,7 @@ var config = require('../config');
 var model = require('../utility/db');
 
 
-router.post('/v2/room-schedule', timeout('300s'),function (req, res) {
+router.post('/v2/room-schedule', timeout('3100s'),function (req, res) {
   var location_id = req.body['location_id'];
   var building_id = req.body['building_id'];
   var week = req.body['week'];
