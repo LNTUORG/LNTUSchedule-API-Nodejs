@@ -8,7 +8,7 @@ var router = express.Router();
 var timeout = require('connect-timeout');
 
 var agent = require('../agent/dom_agent');
-var room_schedule_parser_v2 = require('../parser/room_schedule_v2');
+var roomScheduleV2 = require('../parser/roomScheduleParserV2');
 var lntu_building = require('../parser/lntu_building');
 var constant = require('../agent/constant');
 var config = require('../config');
@@ -24,7 +24,7 @@ router.post('/v2/room-schedule', timeout('3100s'),function (req, res) {
   if (parseInt(week) > 26 || parseInt(week) < 1 || parseInt(week_day) < 1 || parseInt(week_day) > 7) {
     return res.status(400).json({ code: constant.cookie.args_error, message: '' });
   }
-  room_schedule_parser_v2(config.admin.user_id, config.admin.password, location_id, building_id, week, week_day, 'teacher/teachresource/roomschedule_week.jsdo', function (err, result) {
+  roomScheduleV2(location_id, building_id, week, week_day, 'manager/teachresource/schedule/export_room_schedule_detail.jsp', function (err, result) {
     if (err == constant.cookie.user_error) {
       return res.status(400).json({ code: err, message: 'password error' });
     } else if (err == constant.cookie.net_error) {

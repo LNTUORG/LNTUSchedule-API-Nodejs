@@ -5,7 +5,7 @@
 
 var config = require('../config');
 var model = require('./db');
-var room_schedule_parser_v2 = require('../parser/room_schedule_v2');
+var room_schedule_parser_v2 = require('../parser/roomScheduleParserV2');
 var constant = require('../agent/constant');
 var moment = require('moment');
 var async = require('async');

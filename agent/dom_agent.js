@@ -27,6 +27,25 @@ var normal_agent = function (u_id, passwd, target, callback) {
   });
 };
 
+var agentWithoutCookie = function (target, callback) {
+
+  superagent
+    .get(constant.urls[base_url_index] + target)
+    .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36')
+    .charset('gbk')
+    .timeout(3000000)
+    .end(function(err, res) {
+      if (err) {
+        return callback(constant.cookie.net_error, null);
+      }
+      var result = res.text;
+      if (result.indexOf('教室') < 0) {
+        return callback(constant.cookie.net_error, null);
+      }
+      return callback(null, result);
+    });
+};
+
 var get_cookie = function (u_id, passwd, callback) {
   superagent
     .post(constant.urls[base_url_index] + 'j_acegi_security_check')
@@ -130,5 +149,6 @@ module.exports = {
   normal_agent: normal_agent,
   get_cookie: get_cookie,
   test_speed: test_speed,
-  base_url_index: base_url_index
+  base_url_index: base_url_index,
+  agentWithoutCookie: agentWithoutCookie
 };
