@@ -53,13 +53,10 @@ var get_cookie = function (u_id, passwd, callback) {
 var get_dom = function (target, cookie, callback) {
   superagent
     .get(constant.urls[base_url_index] + target)
-    .timeout({
-      response: 3000000,
-      deadline: 3000000
-    })
     .set('Cookie', 'JSESSIONID=' + cookie + '; AJSTAT_ok_times=1')
     .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36')
     .charset('gbk')
+    .timeout(3000000)
     .end(function(err, res) {
       if (err) {
         return callback(constant.cookie.net_error, null);
