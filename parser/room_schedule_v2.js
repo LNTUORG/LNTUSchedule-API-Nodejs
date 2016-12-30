@@ -29,7 +29,11 @@ var analyse_room = function(user_id, password, aid, buildingid, whichweek, week,
       var room_status = room_temp.eq(i).children('tr').eq(1).children('td');
       var status_arr = [];
       for (var j = 0; j < room_status.length; j+=2) {
-        status_arr.push(room_status.eq(j).text().trim() != '' ? '1' : '0');
+        if (room_status.eq(j).text().trim() == '' && room_status.eq(j + 1).text().trim() == '') {
+          status_arr.push('0');
+        } else {
+          status_arr.push('1');
+        }
       }
       total_status_arr.push(status_arr);
     }
