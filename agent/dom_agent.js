@@ -136,7 +136,7 @@ var test_speed = function (callback) {
       var end = new Date();
       var time_diff = end - start;
       if (err) {
-        time_diff = '3600';
+        time_diff = '360000';
       }
       content += 'test: ' + url + '\n' + 'speed: ' + time_diff + '(ms)\n\n';
       results.push({ res: time_diff, url: url });
