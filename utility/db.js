@@ -30,15 +30,24 @@ var building_schema = new mongoose.Schema({
   building_id: { type: String },
   building_name: { type: String },
   building_phone: { type: String },
+  manager_phone: {type: String},
   auto_send: { type: Boolean },
   rooms: {type: Array},
   create_at: { type: Date, default: Date.now() }
 });
 
+var sms_log_schema = new mongoose.Schema({
+  sms_content: { type: String },
+  room_status: mongoose.Schema.Types.Mixed,
+  create_at: { type: Date, default: Date.now() }
+});
+
 var user_model = db.model('user', user_schema);
 var building_model = db.model('building', building_schema);
+var sms_log_model = db.model('sms_log', sms_log_schema);
 
 module.exports = {
   user_model: user_model,
-  building_model: building_model
+  building_model: building_model,
+  sms_log_model: sms_log_model
 };

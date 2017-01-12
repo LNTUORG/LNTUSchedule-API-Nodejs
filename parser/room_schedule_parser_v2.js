@@ -10,7 +10,7 @@ var constant = require('../agent/constant');
 var model = require('../utility/db');
 
 
-var analyseRoom = function(aid, buildingid, whichweek, week, target, callback) {
+var analyse_room = function(aid, buildingid, whichweek, week, target, callback) {
 
   target = target + '?weeks=' + whichweek + '&buildingid1=' + buildingid;
   agent.agentWithoutCookie(target, function(err, html) {
@@ -80,4 +80,4 @@ var analyseRoom = function(aid, buildingid, whichweek, week, target, callback) {
   });
 };
 
-module.exports = analyseRoom;
+module.exports = analyse_room;

@@ -4,8 +4,8 @@
 'use strict';
 
 var config = require('../config');
-var model = require('./db');
-var roomScheduleV2 = require('../parser/roomScheduleParserV2');
+var db = require('./db');
+var room_schedule_parser_v2 = require('../parser/room_schedule_parser_v2');
 var constant = require('../agent/constant');
 var moment = require('moment');
 var async = require('async');
@@ -56,9 +56,9 @@ function capture_a_building(building, callback) {
   days = days + 1;
   var week = Math.ceil(days / 7);
 
-  roomScheduleV2(building.location_id, building.building_id, week, week_day, 'manager/teachresource/schedule/export_room_schedule_detail.jsp', function (err, result) {
+  room_schedule_parser_v2(building.location_id, building.building_id, week, week_day, 'manager/teachresource/schedule/export_room_schedule_detail.jsp', function (err, result) {
     if (err != null) {
-      send_sms_using_smsbao_service(config.class_admin.phone, building.building_name + '短信发送失败，因为教务处网站过于卡顿，请手动发送');
+      send_sms_using_smsbao_service(building.manager_phone, building.building_name + '短信发送失败，因为教务处网站过于卡顿，请手动发送');
       callback(null, building);
       return;
     }
@@ -69,7 +69,13 @@ function capture_a_building(building, callback) {
         str = str + arr[i];
       }
     }
-    send_sms_using_smsbao_service(building.building_phone, parse_hex(str));
+    var sms_content = parse_hex(str);
+    db.sms_log_model.create({
+      sms_content: sms_content,
+      room_status: result
+    }, function (err, docs) {
+    });
+    send_sms_using_smsbao_service(building.building_phone, sms_content);
     callback(null, null);
   })
 }
@@ -90,7 +96,7 @@ function send_sms_with_buildings(docs) {
 }
 
 var send_sms = function () {
-  model.building_model.find({auto_send: true}, function (error, docs) {
+  db.building_model.find({auto_send: true}, function (error, docs) {
     if(error || docs.length < 1){
     } else {
       send_sms_with_buildings(docs);
