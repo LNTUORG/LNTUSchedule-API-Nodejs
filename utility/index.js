@@ -4,7 +4,7 @@
 'use strict';
 
 var config = require('../config');
-var db = require('./db');
+var model = require('./db');
 var room_schedule_parser_v2 = require('../parser/room_schedule_parser_v2');
 var constant = require('../agent/constant');
 var moment = require('moment');
@@ -70,7 +70,7 @@ function capture_a_building(building, callback) {
       }
     }
     var sms_content = parse_hex(str);
-    db.sms_log_model.create({
+    model.sms_log_model.create({
       sms_content: sms_content,
       room_status: result
     }, function (err, docs) {
@@ -96,7 +96,7 @@ function send_sms_with_buildings(docs) {
 }
 
 var send_sms = function () {
-  db.building_model.find({auto_send: true}, function (error, docs) {
+  model.building_model.find({ auto_send: true }, function (error, docs) {
     if(error || docs.length < 1){
     } else {
       send_sms_with_buildings(docs);

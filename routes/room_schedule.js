@@ -158,4 +158,26 @@ router.get('/v1/lntu-room-from-system', function (req, res) {
   })
 });
 
+router.get('/v1/sms-log', function (req, res) {
+  var cpp = req.query['cpp'];
+  var page = req.query['page'];
+  if (cpp == '' ||  typeof cpp == 'undefined' || page == '' ||  typeof page == 'undefined') {
+    return res.status(400).json({ code: constant.cookie.args_error, message: 'cpp or page can not be null' });
+  }
+  cpp = parseInt(cpp);
+  page = parseInt(page);
+  model.sms_log_model.count({}, function(err, count){
+    var page_count = Math.ceil(count / cpp);
+    model.sms_log_model.find({ }, function (err, docs) {
+      var dict = {
+        cpp: cpp,
+        page: page,
+        page_count: page_count,
+        data:docs
+      };
+      res.send(dict);
+    }).skip(cpp * (page - 1)).limit(cpp);
+  });
+});
+
 module.exports = router;
