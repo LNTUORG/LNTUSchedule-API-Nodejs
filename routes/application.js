@@ -21,6 +21,7 @@ router.post('/config/first-week-monday', function (req, res) {
     return res.status(400).json({ code: constant.cookie.args_error, message: 'it seems something went wrong' });
   }
   var date_value = req.body['first_week_monday'];
+  date_value += 'T00:00:00.000+08:00';
 
   model.system_config_model.find({ key: constant.config_key.first_week_monday }, function (error, docs) {
     if(error || docs.length < 1){
@@ -32,6 +33,13 @@ router.post('/config/first-week-monday', function (req, res) {
     }
   });
   return res.status(204).send();
+});
+
+router.get('/config/first-week-monday', function (req, res) {
+
+  model.system_config_model.find({ key: constant.config_key.first_week_monday }, 'key value updated_at', function (error, docs) {
+    return res.status(200).json(docs[0]);
+  });
 });
 
 router.post('/config/login-test-info', function (req, res) {
@@ -60,6 +68,20 @@ router.post('/config/login-test-info', function (req, res) {
     }
   });
   return res.status(204).send();
+});
+
+router.get('/config/login-test-info', function (req, res) {
+
+  model.system_config_model.find({ key: constant.config_key.admin_user_id }, 'key value updated_at', function (error, docs) {
+
+    var dict = {
+      admin_user_id: docs[0].value
+    };
+    model.system_config_model.find({ key: constant.config_key.admin_password }, 'key value updated_at', function (error, docs) {
+      dict.admin_password = docs[0].value;
+      return res.status(200).json(dict);
+    });
+  });
 });
 
 module.exports = router;
