@@ -42,12 +42,20 @@ var sms_log_schema = new mongoose.Schema({
   create_at: { type: Date, default: Date.now() }
 });
 
+var system_config_schema = new mongoose.Schema({
+  key: {type: String},
+  value: {type: String},
+  updated_at: { type: Date, default: Date.now() }
+});
+
 var user_model = db.model('user', user_schema);
 var building_model = db.model('building', building_schema);
 var sms_log_model = db.model('sms_log', sms_log_schema);
+var system_config_model = db.model('system_config', system_config_schema);
 
 module.exports = {
   user_model: user_model,
   building_model: building_model,
-  sms_log_model: sms_log_model
+  sms_log_model: sms_log_model,
+  system_config_model: system_config_model
 };

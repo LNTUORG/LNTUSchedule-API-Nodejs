@@ -9,6 +9,7 @@ var charset = require('superagent-charset');
 var superagent = require('superagent');
 var constant = require('./constant');
 var config = require('../config');
+var model = require('../utility/db');
 
 charset(superagent);
 
@@ -128,20 +129,37 @@ var test_speed = function (callback) {
     content += '\n\nChange url to index ' + base_url_index + ' : ' + results[0].url + '\n\n';
     return callback(content);
   });
-  
-  constant.urls.forEach(function (url) {
 
-    var start = new Date();
-    net_speed(config.admin.user_id, config.admin.password, url, function (err) {
-      var end = new Date();
-      var time_diff = end - start;
-      if (err) {
-        time_diff = '360000';
-      }
-      content += 'test: ' + url + '\n' + 'speed: ' + time_diff + '(ms)\n\n';
-      results.push({ res: time_diff, url: url });
-      ep.emit('test_speed');
-    })
+  var admin = {};
+  model.system_config_model.find({ key: constant.config_key.admin_user_id }, function (error, docs) {
+    if(error || docs.length < 1){
+
+    } else {
+      admin.user_id = docs[0].value;
+      model.system_config_model.find({ key: constant.config_key.admin_password }, function (error, docs) {
+        if(error || docs.length < 1){
+
+        } else {
+          admin.password = docs[0].value;
+
+          constant.urls.forEach(function (url) {
+
+            var start = new Date();
+
+            net_speed(admin.user_id, admin.password, url, function (err) {
+              var end = new Date();
+              var time_diff = end - start;
+              if (err) {
+                time_diff = '360000';
+              }
+              content += 'test: ' + url + '\n' + 'speed: ' + time_diff + '(ms)\n\n';
+              results.push({ res: time_diff, url: url });
+              ep.emit('test_speed');
+            })
+          });
+        }
+      });
+    }
   });
 };
 

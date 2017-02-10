@@ -51,33 +51,41 @@ function capture_a_building(building, callback) {
   var week_day = date.getDay();
   week_day = week_day == 0 ? 7 : week_day;
 
-  var start_date = moment(config.first_week_monday).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
-  var days = moment().diff(start_date, 'days');
-  days = days + 1;
-  var week = Math.ceil(days / 7);
+  model.system_config_model.find({ key: constant.config_key.first_week_monday }, function (error, docs) {
+    if(error || docs.length < 1){
+      return callback(null, null);
+    } else {
+      var start_date = moment(docs[0].value).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+      var days = moment().diff(start_date, 'days');
+      days = days + 1;
+      var week = Math.ceil(days / 7);
 
-  room_schedule_parser_v2(building.location_id, building.building_id, week, week_day, 'manager/teachresource/schedule/export_room_schedule_detail.jsp', function (err, result) {
-    if (err != null) {
-      send_sms_using_smsbao_service(building.manager_phone, building.building_name + '短信发送失败，因为教务处网站过于卡顿，请手动发送');
-      callback(null, building);
-      return;
+      console.log(week, week_day, start_date, days);
+
+      room_schedule_parser_v2(building.location_id, building.building_id, week, week_day, 'manager/teachresource/schedule/export_room_schedule_detail.jsp', function (err, result) {
+        if (err != null) {
+          send_sms_using_smsbao_service(building.manager_phone, building.building_name + '短信发送失败，因为教务处网站过于卡顿，请手动发送');
+          callback(null, building);
+          return;
+        }
+        var str = '';
+        for (var i = 0; i < 5; i++) {
+          for (var j = 0; j < result.results.length; j++) {
+            var arr = result.results[j].status;
+            str = str + arr[i];
+          }
+        }
+        var sms_content = parse_hex(str);
+        model.sms_log_model.create({
+          sms_content: sms_content,
+          room_status: result
+        }, function (err, docs) {
+        });
+        send_sms_using_smsbao_service(building.building_phone, sms_content);
+        callback(null, null);
+      })
     }
-    var str = '';
-    for (var i = 0; i < 5; i++) {
-      for (var j = 0; j < result.results.length; j++) {
-        var arr = result.results[j].status;
-        str = str + arr[i];
-      }
-    }
-    var sms_content = parse_hex(str);
-    model.sms_log_model.create({
-      sms_content: sms_content,
-      room_status: result
-    }, function (err, docs) {
-    });
-    send_sms_using_smsbao_service(building.building_phone, sms_content);
-    callback(null, null);
-  })
+  });
 }
 
 function send_sms_using_smsbao_service(phone, content) {

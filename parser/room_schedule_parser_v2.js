@@ -5,10 +5,8 @@
 
 var agent = require('../agent/dom_agent');
 var cheerio = require('cheerio');
-var config = require('../config');
 var constant = require('../agent/constant');
 var model = require('../utility/db');
-
 
 var analyse_room = function(aid, buildingid, whichweek, week, target, callback) {
 
@@ -71,11 +69,17 @@ var analyse_room = function(aid, buildingid, whichweek, week, target, callback) 
         }
       }
       var dict = {};
-      dict.firstWeekMondayAt = config.first_week_monday;
       dict.results = dict_arr;
       dict.week = whichweek;
       dict.weekday = week;
-      return callback(null, dict);
+      model.system_config_model.find({ key: constant.config_key.first_week_monday }, function (error, docs) {
+        if(error || docs.length < 1){
+          return callback(constant.cookie.args_error, null);
+        } else {
+          dict.firstWeekMondayAt = docs[0].value;
+          return callback(null, dict);
+        }
+      });
     });
   });
 };

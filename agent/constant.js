@@ -52,6 +52,11 @@ var constant = {
     '11101': 't',
     '11110': 'u',
     '11111': 'v'
+  },
+  config_key: {
+    first_week_monday: 'first_week_monday',
+    admin_user_id: 'admin_user_id',
+    admin_password: 'admin_password'
   }
 };
 
