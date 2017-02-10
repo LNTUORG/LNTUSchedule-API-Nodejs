@@ -38,7 +38,10 @@ router.post('/config/first-week-monday', function (req, res) {
 router.get('/config/first-week-monday', function (req, res) {
 
   model.system_config_model.find({ key: constant.config_key.first_week_monday }, 'key value updated_at', function (error, docs) {
-    return res.status(200).json(docs[0]);
+    var dict = {
+      first_week_monday: docs[0].value
+    };
+    return res.status(200).json(dict);
   });
 });
 
