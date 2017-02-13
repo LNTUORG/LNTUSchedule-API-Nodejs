@@ -76,7 +76,7 @@ var analyse_room = function(aid, buildingid, whichweek, week, target, callback) 
         if(error || docs.length < 1){
           return callback(constant.cookie.args_error, null);
         } else {
-          dict.firstWeekMondayAt = docs[0].value;
+          dict.first_week_monday_at = docs[0].value;
           return callback(null, dict);
         }
       });
