@@ -28,7 +28,7 @@ router.post('/config/first-week-monday', function (req, res) {
       model.system_config_model.create({ key: constant.config_key.first_week_monday, value: date_value }, function (error, docs) {
       });
     } else {
-      model.system_config_model.update({ key: constant.config_key.first_week_monday }, { key: constant.config_key.first_week_monday, value: date_value }, function (error, docs) {
+      model.system_config_model.update({ key: constant.config_key.first_week_monday }, { key: constant.config_key.first_week_monday, value: date_value, updated_at: Date.now() }, function (error, docs) {
       });
     }
   });
@@ -57,7 +57,7 @@ router.post('/config/login-test-info', function (req, res) {
       model.system_config_model.create({ key: constant.config_key.admin_user_id, value: admin_user_id }, function (error, docs) {
       });
     } else {
-      model.system_config_model.update({ key: constant.config_key.admin_user_id }, { key: constant.config_key.admin_user_id, value: admin_user_id }, function (error, docs) {
+      model.system_config_model.update({ key: constant.config_key.admin_user_id }, { key: constant.config_key.admin_user_id, value: admin_user_id, updated_at: Date.now() }, function (error, docs) {
       });
     }
   });
@@ -66,7 +66,7 @@ router.post('/config/login-test-info', function (req, res) {
       model.system_config_model.create({ key: constant.config_key.admin_password, value: admin_password }, function (error, docs) {
       });
     } else {
-      model.system_config_model.update({ key: constant.config_key.admin_password }, { key: constant.config_key.admin_password, value: admin_password }, function (error, docs) {
+      model.system_config_model.update({ key: constant.config_key.admin_password }, { key: constant.config_key.admin_password, value: admin_password, updated_at: Date.now() }, function (error, docs) {
       });
     }
   });
