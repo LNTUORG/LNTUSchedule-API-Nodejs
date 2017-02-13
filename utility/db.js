@@ -47,7 +47,7 @@ var sms_log_schema = new mongoose.Schema({
 var system_config_schema = new mongoose.Schema({
   key: {type: String},
   value: {type: String},
-  updated_at: { type: Date, default: Date.now() }
+  update_at: { type: Date, default: Date.now() }
 });
 
 var user_model = db.model('user', user_schema);
