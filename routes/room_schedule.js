@@ -221,7 +221,7 @@ router.get('/v1/sms-log', function (req, res) {
         data:docs
       };
       res.send(dict);
-    }).skip(cpp * (page - 1)).limit(cpp);
+    }).sort({ _id: -1 }).skip(cpp * (page - 1)).limit(cpp);
   });
 });
 

@@ -60,8 +60,6 @@ function capture_a_building(building, callback) {
       days = days + 1;
       var week = Math.ceil(days / 7);
 
-      console.log(week, week_day, start_date, days);
-
       room_schedule_parser_v2(building.location_id, building.building_id, week, week_day, 'manager/teachresource/schedule/export_room_schedule_detail.jsp', function (err, result) {
         if (err != null) {
           send_sms_using_smsbao_service(building.manager_phone, building.building_name + '短信发送失败，因为教务处网站过于卡顿，请手动发送');
@@ -78,6 +76,8 @@ function capture_a_building(building, callback) {
         var sms_content = parse_hex(str);
         model.sms_log_model.create({
           sms_content: sms_content,
+          building_name: building.building_name,
+          phone_num: building.building_phone,
           room_status: result
         }, function (err, docs) {
         });
