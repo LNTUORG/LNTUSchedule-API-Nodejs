@@ -77,7 +77,7 @@ function capture_a_building(building, callback) {
         model.sms_log_model.create({
           sms_content: sms_content,
           building_name: building.building_name,
-          phone_num: building.building_phone,
+          building_phone: building.building_phone,
           room_status: result
         }, function (err, docs) {
         });

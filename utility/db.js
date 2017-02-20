@@ -39,7 +39,7 @@ var building_schema = new mongoose.Schema({
 var sms_log_schema = new mongoose.Schema({
   sms_content: { type: String },
   building_name: { type: String },
-  phone_num: { type: String},
+  building_phone: { type: String},
   room_status: mongoose.Schema.Types.Mixed,
   create_at: { type: Date, default: Date.now() }
 });
