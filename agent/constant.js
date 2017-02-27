@@ -10,15 +10,6 @@ var constant = {
     auth_error: 'AUTH_ERROR',
     args_error: 'ARGS_ERROR'
   },
-  urls: [
-    'http://60.18.131.131:11080/academic/',
-    'http://60.18.131.131:11081/academic/',
-    'http://60.18.131.131:11180/academic/',    //*
-    'http://60.18.131.131:11181/academic/',
-    'http://60.18.131.131:11080/newacademic/', //*
-    'http://60.18.131.131:11081/newacademic/',
-    'http://60.18.131.133:11180/newacademic/' //*
-  ],
   hex_map: {
     '00000': '0',
     '00001': '1',
@@ -54,9 +45,7 @@ var constant = {
     '11111': 'v'
   },
   config_key: {
-    first_week_monday: 'first_week_monday',
-    admin_user_id: 'admin_user_id',
-    admin_password: 'admin_password'
+    first_week_monday: 'first_week_monday'
   }
 };
 

@@ -8,7 +8,6 @@ var router = express.Router();
 var uuid = require('node-uuid');
 var model = require('../utility/db');
 var utility = require('../utility/index');
-var agent = require('../agent/dom_agent');
 var constant = require('../agent/constant');
 var config = require('../config');
 

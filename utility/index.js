@@ -60,7 +60,7 @@ function capture_a_building(building, callback) {
       days = days + 1;
       var week = Math.ceil(days / 7);
 
-      room_schedule_parser_v2(building.location_id, building.building_id, week, week_day, 'manager/teachresource/schedule/export_room_schedule_detail.jsp', function (err, result) {
+      room_schedule_parser_v2(building.location_id, building.building_id, week, week_day, function (err, result) {
         if (err != null) {
           send_sms_using_smsbao_service(building.manager_phone, building.building_name + '短信发送失败，因为教务处网站过于卡顿，请手动发送');
           callback(null, building);

@@ -3,85 +3,52 @@
  */
 'use strict';
 
-var agent = require('../agent/dom_agent');
-var cheerio = require('cheerio');
 var constant = require('../agent/constant');
 var model = require('../utility/db');
+var superagent = require('superagent');
 
-var analyse_room = function(aid, buildingid, whichweek, week, target, callback) {
+var analyse_room = function(aid, buildingid, whichweek, week, callback) {
 
-  target = target + '?weeks=' + whichweek + '&buildingid1=' + buildingid;
-  agent.agentWithoutCookie(target, function(err, html) {
-    if (err) {
-      return callback(err, null);
-    }
-
-    var $ = cheerio.load(html);
-    var room_name_arr = [];
-    var total_status_arr = [];
-    var total_table_temp = $('table[cellpadding="1"]', html).eq(0);
-    var class_temp = total_table_temp.children('tr');
-
-    for (var h = 1; h < class_temp.length; h++) {
-      room_name_arr.push(class_temp.eq(h).children('td').eq(0).text().trim());
-
-      var result = class_temp.eq(h).children('td').eq(parseInt(week) + 2).text().trim();
-      var temp_arr = ['1', '1', '1', '1', '1'];
-
-      if (result.indexOf('1') < 0) {
-        temp_arr[0] = '0';
+  superagent
+    .get('https://api.lgdjwc.com/v1/room-schedule?location_id=' + aid + '&building_id=' + buildingid + '&week=' + whichweek + '&week_day=' + week)
+    .timeout(3000000)
+    .end(function(err, res) {
+      if (err) {
+        return callback(constant.cookie.net_error, null);
       }
-      if (result.indexOf('2') < 0) {
-        temp_arr[1] = '0';
+      var temp_dict = {};
+      for (var k = 0; k < res.body.results.length; k++) {
+        temp_dict[res.body.results[k].name] = res.body.results[k].status;
       }
-      if (result.indexOf('3') < 0) {
-        temp_arr[2] = '0';
-      }
-      if (result.indexOf('4') < 0) {
-        temp_arr[3] = '0';
-      }
-      if (result.indexOf('5') < 0) {
-        temp_arr[4] = '0';
-      }
-      total_status_arr.push(temp_arr);
-    }
+      var dict_arr = [];
 
-    var temp_dict = {};
-    for (var k = 0; k < room_name_arr.length; k++) {
-      temp_dict[room_name_arr[k]] = total_status_arr[k];
-    }
-
-    var dict_arr = [];
-
-    model.building_model.find({ location_id: aid, building_id: buildingid }, function (error, docs) {
-      if (error || docs.length == 0) {
-        for (var m = 0; m < room_name_arr.length; m++) {
-          dict_arr.push({name: room_name_arr[m], status: total_status_arr[m]});
-        }
-      } else {
-        var rooms = docs[0]['rooms'];
-        for (var l = 0; l < rooms.length; l++) {
-          if (!(rooms[l] in temp_dict)) {
-            dict_arr.push({name: rooms[l], status: ['1', '1', '1', '1', '1']});
-          } else {
-            dict_arr.push({name: rooms[l], status: temp_dict[rooms[l]]});
+      model.building_model.find({ location_id: aid, building_id: buildingid }, function (error, docs) {
+        if (error || docs.length == 0) {
+          dict_arr = res.body.results;
+        } else {
+          var rooms = docs[0]['rooms'];
+          for (var l = 0; l < rooms.length; l++) {
+            if (!(rooms[l] in temp_dict)) {
+              dict_arr.push({name: rooms[l], status: ['1', '1', '1', '1', '1']});
+            } else {
+              dict_arr.push({name: rooms[l], status: temp_dict[rooms[l]]});
+            }
           }
         }
-      }
-      var dict = {};
-      dict.results = dict_arr;
-      dict.week = whichweek;
-      dict.weekday = week;
-      model.system_config_model.find({ key: constant.config_key.first_week_monday }, function (error, docs) {
-        if(error || docs.length < 1){
-          return callback(constant.cookie.args_error, null);
-        } else {
-          dict.first_week_monday_at = docs[0].value;
-          return callback(null, dict);
-        }
+        var dict = {};
+        dict.results = dict_arr;
+        dict.week = whichweek;
+        dict.weekday = week;
+        model.system_config_model.find({ key: constant.config_key.first_week_monday }, function (error, docs) {
+          if(error || docs.length < 1){
+            return callback(constant.cookie.args_error, null);
+          } else {
+            dict.first_week_monday_at = docs[0].value;
+            return callback(null, dict);
+          }
+        });
       });
     });
-  });
 };
 
 module.exports = analyse_room;

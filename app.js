@@ -36,21 +36,10 @@ app.use('/room', room_schedule);
 
 var server = app.listen(config.port, function () {
   console.log('LNTUSchedule app listening at http://%s:%s', server.address().address, server.address().port);
-  auto_fix_url();
 });
 
 if (config.auto_send) {
   var auto_send = schedule.scheduleJob('0 21 7 * * *', function (){
     utility.send_sms();
-  });
-}
-
-var auto_fix = schedule.scheduleJob('*/10 * * * *', function () {
-  auto_fix_url();
-});
-
-function auto_fix_url() {
-  request('http://localhost:' + server.address().port + '/application/auto-fix', function (error, response, body) {
-    console.log(body);
   });
 }
