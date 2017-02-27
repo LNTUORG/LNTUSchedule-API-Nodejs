@@ -5,7 +5,6 @@
 
 var express = require('express');
 var router = express.Router();
-var timeout = require('connect-timeout');
 
 var room_schedule_parser_v2 = require('../parser/room_schedule_parser_v2');
 var lntu_building = require('../parser/lntu_building');
@@ -14,7 +13,7 @@ var config = require('../config');
 var model = require('../utility/db');
 
 
-router.post('/v2/room-schedule', timeout('3100s'),function (req, res) {
+router.post('/v2/room-schedule',function (req, res) {
   var location_id = req.body['location_id'];
   var building_id = req.body['building_id'];
   var week = req.body['week'];

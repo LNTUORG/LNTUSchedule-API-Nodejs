@@ -11,15 +11,15 @@ utility.send_sms();
 // var start_date = moment(config.first_week_monday).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 // var days = moment().diff(start_date, 'days');
 // console.log(days);
-// superagent
-//   .get('https://api.lgdjwc.com/v1/room-schedule?location_id=3&building_id=14&week=2&week_day=1')
-//   .timeout(3000000)
-//   .end(function(err, res) {
-//     if (err) {
-//     	console.log(err);
-//       return callback(constant.cookie.net_error, null);
-//     }
-//     var result = res.body;
-//     console.log(result);
-//     // return callback(null, result);
-//   });
+superagent
+  .get('https://api.lgdjwc.com/v1/room-schedule?location_id=1&building_id=4&week=2&week_day=1')
+  .timeout(3000000)
+  .end(function(err, res) {
+    if (err) {
+    	console.log(err);
+      return callback(constant.cookie.net_error, null);
+    }
+    var result = res.body;
+    console.log(result);
+    // return callback(null, result);
+  });
