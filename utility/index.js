@@ -78,7 +78,8 @@ function capture_a_building(building, callback) {
           sms_content: sms_content,
           building_name: building.building_name,
           building_phone: building.building_phone,
-          room_status: result
+          room_status: result,
+          create_at: Date.now()
         }, function (err, docs) {
         });
         send_sms_using_smsbao_service(building.building_phone, sms_content);
