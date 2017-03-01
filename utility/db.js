@@ -41,7 +41,14 @@ var sms_log_schema = new mongoose.Schema({
   building_name: { type: String },
   building_phone: { type: String},
   room_status: mongoose.Schema.Types.Mixed,
-  create_at: { type: Date, default: Date.now() }
+  create_at: { type: Date }
+});
+
+// on every save, add the date
+sms_log_schema.pre('save', function(next) {
+
+  this.create_at = new Date();
+  next();
 });
 
 var system_config_schema = new mongoose.Schema({
